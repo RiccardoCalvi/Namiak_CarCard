@@ -72,9 +72,10 @@ export class CarCard extends LitElement {
   private getTimeLeftCharge = (entity?: string) => {
     const dateTimeFinishedState = entity && this.hass.states[entity].state;
     const timeLeftCharge = entity && getTimeLeftUntil(dateTimeFinishedState);
-    const ore = Math.floor(dateTimeFinishedState / 60);
-    const minuti = dateTimeFinishedState % 60;
-    return `${ore.toString().padStart(2, '0')}:${minuti.toString().padStart(2, '0')}`;
+    // const ore = Math.floor(dateTimeFinishedState / 60);
+    // const minuti = dateTimeFinishedState % 60;
+    // return `${ore.toString().padStart(2, '0')}:${minuti.toString().padStart(2, '0')}`;
+    return timeLeftCharge;
   };
 
   protected render(): TemplateResult {
@@ -128,7 +129,15 @@ export class CarCard extends LitElement {
 
           ${!this._config?.image?.src ? "" : html` <img src=${this._config.image.src} width="100%" alt="Your Car" id="main-image" />`}
           ${true
-            ? ""
+            ? html`
+            <div class="flex horizontal">
+              <div class="flex vertical" id="charging-text-container">
+                <p class="label1">${isCharging ? "Charging" : "Not Charging"}</p>
+                ${!isCharging ? "" : html`<p class="state1">${timeLeftCharge}</p>`}
+              </div>
+              <ha-icon icon="mdi:flash" id="charge-icon"></ha-icon>
+            </div>
+          `
             : html`
                 <div class="flex horizontal">
                   <div class="flex vertical" id="charging-text-container">
