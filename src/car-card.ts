@@ -72,7 +72,9 @@ export class CarCard extends LitElement {
   private getTimeLeftCharge = (entity?: string) => {
     const dateTimeFinishedState = entity && this.hass.states[entity].state;
     const timeLeftCharge = entity && getTimeLeftUntil(dateTimeFinishedState);
-    return timeLeftCharge;
+    const ore = Math.floor(dateTimeFinishedState / 60);
+    const minuti = dateTimeFinishedState % 60;
+    return `${ore.toString().padStart(2, '0')}:${minuti.toString().padStart(2, '0')}`;
   };
 
   protected render(): TemplateResult {
